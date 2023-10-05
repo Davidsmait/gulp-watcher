@@ -1,0 +1,29 @@
+@use "variables";
+@use "mixins";
+
+body {
+  font-size: variables.$font-size-base;
+  color: variables.$color-primary;
+  @include mixins.button-styles;
+}
+
+.container{
+  width: 100%;
+  max-width: 600px;
+  background: red;
+  padding: 40px;
+  color: white;
+  text-align: center;
+  margin: 35px auto;
+  display: block;
+  box-shadow: 3px 3px 15px #ccc;
+  h1 {
+    font-size: 7em;
+    font-weight: bold;
+  }
+  p {
+    font-size: 2em;
+    margin-top: 25px;
+    line-height: normal
+  }
+}
