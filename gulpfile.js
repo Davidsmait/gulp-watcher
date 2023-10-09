@@ -9,8 +9,9 @@ const postcss = require('gulp-postcss');
 const cssnano = require('cssnano')
 const autoprefixer = require('autoprefixer')
 const terser = require('gulp-terser')
-const browsersync = require('browser-sync').create()
-
+const browsersync = require('browser-sync').create();
+const babel = require('gulp-babel');
+const webpack = require('gulp-webpack')
 
 
 const $ = gulpLoadPlugins({
@@ -28,11 +29,28 @@ function scssTask(){
         .pipe(dest('dist', { sourcemaps: '.'}))
 }
 
+// function jsx(){
+//     return src('./app/js/**/*.jsx', { sourcemaps : true})
+//         .pipe(babel({
+//             presets: ['@babel/preset-react']
+//         }))
+//         .pipe(dest('dist'), { sourcemaps : '.'})
+// }
+//
+// exports.compilejsx = jsx
+//
+// }
+
+
 function jsTask(){
     return src('./app/js/*.js', { sourcemaps : true})
+        .pipe(babel({
+            presets: ['@babel/react']
+        }))
         .pipe(terser())
         .pipe(dest('dist'), { sourcemaps : '.'})
 }
+exports.build = jsTask;
 
 // browsersync task
 function bowserSyncTask(cb) {
@@ -51,7 +69,7 @@ function reloadBrowserTask(cb) {
 
 function watcher() {
     watch('./*.html', reloadBrowserTask)
-    watch(['app/js/**/*.js', 'sass/**/*.scss'], series(scssTask, jsTask, reloadBrowserTask))
+    watch(['app/js/**/*.js', 'sass/**/*.scss', 'app/js/**/*.jsx'], series(scssTask, jsTask,  reloadBrowserTask))
 }
 
 exports.default = series(scssTask, jsTask, bowserSyncTask, watcher)
